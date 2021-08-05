@@ -11,7 +11,7 @@ import numpy  as np
 import math
 import matplotlib.pyplot as plt
 
-load_from_parameter_server=False
+load_from_parameter_server=True
 
 if load_from_parameter_server:
  param=rospy.get_param("/benchmark")
@@ -65,8 +65,9 @@ for iquery in range(0,queries_number):
             
             min_length=min(min_length,np.min(trajectory_length))
             median_length[iplanner][iplan_time]=np.median(trajectory_length)
-        
+    
     fig, axs = plt.subplots(2)
+    fig.set_size_inches(10,10)
     for iplanner in range(0,len(tested_planners)):
         axs[0].plot(np.array(planning_times),median_length[iplanner]/min_length,"-o", label=planner_str[iplanner])
         axs[1].plot(np.array(planning_times),failures[iplanner],"o", label=planner_str[iplanner])
@@ -76,6 +77,6 @@ for iquery in range(0,queries_number):
     axs[1].set(xlabel="Max planning time",ylabel="Failures")
     axs[1].legend()
     
-    fig.savefig("test 6DOF"+query_str+".png",dpi=300)
+    fig.savefig(query_prefix+query_str+".png",dpi=300)
     plt.show()
     
