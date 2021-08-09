@@ -11,7 +11,7 @@ import numpy  as np
 import math
 import matplotlib.pyplot as plt
 
-load_from_parameter_server=False
+load_from_parameter_server=True
 
 if load_from_parameter_server:
  param=rospy.get_param("/benchmark")
@@ -46,7 +46,7 @@ for iquery in range(0,queries_number):
         pipeline=tested_planners[iplanner][0]
         planner=tested_planners[iplanner][1]
         
-        for iplan_time in range(0,len(planning_times)-1):
+        for iplan_time in range(0,len(planning_times)):
             planning_time=planning_times[iplan_time]
             planning_time_string='planning_time_ms_'+str(int(1000*planning_time))
             
