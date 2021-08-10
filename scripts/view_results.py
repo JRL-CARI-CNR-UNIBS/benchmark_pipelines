@@ -11,12 +11,12 @@ import numpy  as np
 import math
 import matplotlib.pyplot as plt
 
-load_from_parameter_server=True
+load_from_parameter_server=False
 
 if load_from_parameter_server:
  param=rospy.get_param("/benchmark")
 else:
-    with open('../config/DOF3BENCHMARK.yaml') as f:
+    with open('../config/DOF6BENCHMARK1.yaml') as f:
         param = yaml.safe_load(f)
     
 queries_number=param["queries_number"]
