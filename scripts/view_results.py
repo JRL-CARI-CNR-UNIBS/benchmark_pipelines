@@ -26,6 +26,14 @@ pipeline_ids=param["pipeline_ids"]
 
 planning_times=param["planning_times"]
 
+tested_planners=[]
+planner_str=[]
+for pipeline_id in pipeline_ids:
+    planner_ids=param["planner_ids"][pipeline_id]
+    for planner_id in planner_ids:
+        tested_planners.append([pipeline_id,planner_id])
+        planner_str.append(planner_id)
+
 tot_min_length=0
 tot_median_length=np.empty([len(tested_planners),len(planning_times)])
 tot_median_length[:]=0
@@ -34,13 +42,6 @@ for iquery in range(0,queries_number):
     query_str="query_"+str(iquery)
     q=param[query_prefix][query_str];
     
-    tested_planners=[]
-    planner_str=[]
-    for pipeline_id in pipeline_ids:
-        planner_ids=param["planner_ids"][pipeline_id]
-        for planner_id in planner_ids:
-            tested_planners.append([pipeline_id,planner_id])
-            planner_str.append(planner_id)
     
     min_length=math.inf
     median_length=np.empty([len(tested_planners),len(planning_times)])
@@ -50,7 +51,7 @@ for iquery in range(0,queries_number):
         pipeline=tested_planners[iplanner][0]
         planner=tested_planners[iplanner][1]
         
-        for iplan_time in range(0,len(planning_times)-2):
+        for iplan_time in range(0,len(planning_times)):
             planning_time=planning_times[iplan_time]
             planning_time_string='planning_time_ms_'+str(int(1000*planning_time))
             
@@ -86,7 +87,7 @@ for iquery in range(0,queries_number):
     plt.show()
     
     tot_min_length+=min_length
-    
+#    
 #fig, axs = plt.subplots(2)
 #fig.set_size_inches(10,10)
 #for iplanner in range(0,len(tested_planners)):

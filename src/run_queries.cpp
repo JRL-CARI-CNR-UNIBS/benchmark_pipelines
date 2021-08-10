@@ -136,6 +136,9 @@ int main(int argc, char **argv)
 
   for (const double& planning_time: planning_times)
   {
+    if (planning_time<4.0)
+      continue;
+
     move_group.setPlanningTime(planning_time);
     for (const std::string& pipeline_id: pipeline_ids)
     {
