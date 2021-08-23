@@ -16,7 +16,7 @@ load_from_parameter_server=False
 if load_from_parameter_server:
    param=rospy.get_param("/benchmark")
 else:
-   with open('../config/DOF6results.yaml') as f:
+   with open('../config/result_query01_3dof.yaml') as f:
        param = yaml.safe_load(f)
 
 queries_number=param["queries_number"]
@@ -49,6 +49,8 @@ for iquery in range(0,queries_number):
     median_length=np.empty([len(tested_planners),len(planning_times)])
     median_length[:]=np.Inf
     failures=np.zeros([len(tested_planners),len(planning_times)])
+    query_planning_time=np.zeros([len(tested_planners),len(planning_times)])
+
     for iplanner in range(0,len(tested_planners)):
         pipeline=tested_planners[iplanner][0]
         planner=tested_planners[iplanner][1]
@@ -73,6 +75,7 @@ for iquery in range(0,queries_number):
                     trajectory_length[iteration]=np.inf
                     failures[iplanner][iplan_time]+=1
                 tot_planning_time[iplanner][iplan_time]+=result["planning_time"]
+                query_planning_time[iplanner][iplan_time]+=result["planning_time"]
             min_length=min(min_length,np.min(trajectory_length))
             median_length[iplanner][iplan_time]=np.median(trajectory_length)
             tot_median_length[iplanner][iplan_time]+=median_length[iplanner][iplan_time]
@@ -80,7 +83,8 @@ for iquery in range(0,queries_number):
     fig, axs = plt.subplots(2)
     fig.set_size_inches(10,10)
     for iplanner in range(0,len(tested_planners)):
-        axs[0].semilogy(np.array(planning_times),np.log10(median_length[iplanner]/min_length),"-"+marker[iplanner], label=planner_str[iplanner])
+    #    axs[0].semilogy(np.array(planning_times),np.log10(median_length[iplanner]/min_length),"-"+marker[iplanner], label=planner_str[iplanner])
+        axs[0].semilogy(query_planning_time[iplanner]/repetitions,np.log10(median_length[iplanner]/min_length),"-"+marker[iplanner], label=planner_str[iplanner])
         axs[1].plot(np.array(planning_times),failures[iplanner],marker[iplanner], label=planner_str[iplanner])
     axs[0].legend()
     axs[0].set(xlabel="Max planning time",ylabel="Log10(Path length/min(path length))",title=str(query_prefix+"_"+query_str))

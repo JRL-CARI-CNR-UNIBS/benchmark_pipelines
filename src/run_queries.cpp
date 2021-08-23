@@ -192,6 +192,7 @@ int main(int argc, char **argv)
         }
       }
     }
+    system("rosparam dump benchmark_result.yaml /benchmark");
   }
 
   return 0;
