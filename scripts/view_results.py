@@ -13,11 +13,11 @@ import matplotlib.pyplot as plt
 
 load_from_parameter_server=False
 
-#if load_from_parameter_server:
-# param=rospy.get_param("/benchmark")
-#else:
-#    with open('../config/DOF6BENCHMARK_all.yaml') as f:
-#        param = yaml.safe_load(f)
+if load_from_parameter_server:
+   param=rospy.get_param("/benchmark")
+else:
+   with open('../config/DOF6results.yaml') as f:
+       param = yaml.safe_load(f)
 
 queries_number=param["queries_number"]
 repetitions=param["repetitions"]
