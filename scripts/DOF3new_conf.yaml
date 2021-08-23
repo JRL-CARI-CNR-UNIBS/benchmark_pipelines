@@ -1,0 +1,131 @@
+DOF9_cubes:
+  queries_number: 10
+  query_0:
+    goal_configuration:
+    - 0.20609632243216036
+    - -0.5410717858286573
+    - 1.096741379197687
+    start_configuration:
+    - 1.5032622781371698
+    - 0.8980631469447167
+    - -0.6914009489212185
+  query_1:
+    goal_configuration:
+    - 0.692744734483212
+    - 0.7352545085879043
+    - -0.45877115329932416
+    start_configuration:
+    - -0.623145743791759
+    - -0.46385975165013216
+    - 0.14489517921600492
+  query_2:
+    goal_configuration:
+    - 0.009739745868556193
+    - 0.13059887175075713
+    - -1.3149449555363506
+    start_configuration:
+    - -0.3098591076347976
+    - -0.12844967987705025
+    - 1.261429347224906
+  query_3:
+    goal_configuration:
+    - 1.5533259315261618
+    - 0.8657288345167415
+    - -0.12246326538920393
+    start_configuration:
+    - 0.8589282968994232
+    - -0.517772931554541
+    - -0.49280766632538286
+  query_4:
+    goal_configuration:
+    - 0.8875941829847174
+    - 0.7866205271109938
+    - -0.23917557716332372
+    start_configuration:
+    - 1.2340542209174485
+    - 0.8590340061441062
+    - -0.4991660227529704
+  query_5:
+    goal_configuration:
+    - 0.26505916503164917
+    - -0.4108219130197539
+    - 1.4671545228151606
+    start_configuration:
+    - 1.1863010867279022
+    - -0.8252016986729577
+    - -0.27983158322498203
+  query_6:
+    goal_configuration:
+    - -0.6669202852165327
+    - -0.2272414695253595
+    - -1.073080459166877
+    start_configuration:
+    - 0.22301065519619723
+    - 0.38063686780594286
+    - -1.549378790842183
+  query_7:
+    goal_configuration:
+    - -0.445087876505591
+    - 0.44296171906236537
+    - -1.079950424112752
+    start_configuration:
+    - -0.4380588481049985
+    - -0.5834642270458862
+    - 0.43038325740918526
+  query_8:
+    goal_configuration:
+    - -0.5557294700145721
+    - -0.32488115290123964
+    - -0.3937971026184037
+    start_configuration:
+    - 0.08166071994379154
+    - 0.06052946548461913
+    - -0.6949085014438257
+  query_9:
+    goal_configuration:
+    - -0.22465603811759505
+    - -0.6971663423029706
+    - 1.4066776230258868
+    start_configuration:
+    - 0.013506561728194422
+    - -0.19586416815854601
+    - -0.18651057358626266
+group_name: manipulator
+pipeline_ids:
+- dirrt
+- ompl
+planner_ids:
+  dirrt:
+  - mixed_strategy
+  - mixed_strategy_extend
+  - informed_rrt
+  - mixed_strategy_9901
+  - mixed_strategy_extend_9901
+  - mixed_strategy_9902
+  - mixed_strategy_extend_9902
+  - mixed_strategy_99902
+  - mixed_strategy_extend_99902
+  ompl:
+  - BiTRRT
+  - RRTstar
+  - BFMT
+  - LazyPRMstar
+planning_times:
+- 0.1
+- 0.2
+- 0.3
+- 0.4
+- 0.5
+- 0.6
+- 0.7
+- 0.8
+- 0.9
+- 1.0
+- 1.5
+- 2.0
+- 3.0
+- 4.0
+- 5.0
+queries_number: 10
+query_prefix: DOF9_cubes
+repetitions: 30

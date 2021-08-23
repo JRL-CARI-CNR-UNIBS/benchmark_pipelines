@@ -11,7 +11,7 @@ import numpy  as np
 import math
 import matplotlib.pyplot as plt
 
-load_from_parameter_server=True
+load_from_parameter_server=False
 
 if load_from_parameter_server:
  param=rospy.get_param("/benchmark")
