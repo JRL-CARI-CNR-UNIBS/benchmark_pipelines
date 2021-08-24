@@ -11,7 +11,7 @@ import numpy  as np
 import math
 import matplotlib.pyplot as plt
 
-load_from_parameter_server=False
+load_from_parameter_server=True
 
 if load_from_parameter_server:
    param=rospy.get_param("/benchmark")
@@ -25,7 +25,7 @@ query_prefix=param["query_prefix"]
 pipeline_ids=param["pipeline_ids"]
 
 planning_times=param["planning_times"]
-
+planning_times=planning_times[0:2]
 tested_planners=[]
 planner_str=[]
 for pipeline_id in pipeline_ids:
@@ -37,6 +37,7 @@ for pipeline_id in pipeline_ids:
 tot_min_length=0
 tot_median_length=np.empty([len(tested_planners),len(planning_times)])
 tot_median_length[:]=0
+
 tot_failures=np.zeros([len(tested_planners),len(planning_times)])
 tot_planning_time=np.zeros([len(tested_planners),len(planning_times)])
 marker=[]
@@ -83,8 +84,8 @@ for iquery in range(0,queries_number):
     fig, axs = plt.subplots(2)
     fig.set_size_inches(10,10)
     for iplanner in range(0,len(tested_planners)):
-    #    axs[0].semilogy(np.array(planning_times),np.log10(median_length[iplanner]/min_length),"-"+marker[iplanner], label=planner_str[iplanner])
-        axs[0].semilogy(query_planning_time[iplanner]/repetitions,np.log10(median_length[iplanner]/min_length),"-"+marker[iplanner], label=planner_str[iplanner])
+        #axs[0].semilogy(query_planning_time[iplanner]/repetitions,np.log10(median_length[iplanner]/min_length),"-"+marker[iplanner], label=planner_str[iplanner])
+        axs[0].semilogy(query_planning_time[iplanner]/repetitions,(median_length[iplanner]/min_length),"-"+marker[iplanner], label=planner_str[iplanner])
         axs[1].plot(np.array(planning_times),failures[iplanner],marker[iplanner], label=planner_str[iplanner])
     axs[0].legend()
     axs[0].set(xlabel="Max planning time",ylabel="Log10(Path length/min(path length))",title=str(query_prefix+"_"+query_str))
@@ -101,8 +102,8 @@ for iquery in range(0,queries_number):
 fig, axs = plt.subplots(2)
 fig.set_size_inches(10,10)
 for iplanner in range(0,len(tested_planners)):
-#   axs[0].semilogy(np.array(planning_times),np.log10(tot_median_length[iplanner]/tot_min_length),"-"+marker[iplanner], label=planner_str[iplanner])
-   axs[0].semilogy(tot_planning_time[iplanner]/queries_number/repetitions,np.log10(tot_median_length[iplanner]/tot_min_length),"-"+marker[iplanner], label=planner_str[iplanner])
+   axs[0].semilogy(tot_planning_time[iplanner]/queries_number/repetitions,(tot_median_length[iplanner]/tot_min_length),"-"+marker[iplanner], label=planner_str[iplanner])
+   #axs[0].semilogy(tot_planning_time[iplanner]/queries_number/repetitions,np.log10(tot_median_length[iplanner]/tot_min_length),"-"+marker[iplanner], label=planner_str[iplanner])
    axs[1].plot(np.array(planning_times),tot_failures[iplanner],marker[iplanner], label=planner_str[iplanner])
 axs[0].legend()
 axs[0].set(xlabel="Max planning time",ylabel="Log10(Path length/min(path length))",title=str(query_prefix+"_sum"))
