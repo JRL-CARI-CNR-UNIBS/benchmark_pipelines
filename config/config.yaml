@@ -1,6 +1,6 @@
 group_name: manipulator
 queries_number: 10   # number of tuple start-goal
-query_prefix: "DOF3_cubes"
+query_prefix: "DOF6_cubes"
 repetitions: 30  #number of repetitions for each plan
 pipeline_ids:
 - dirrt
