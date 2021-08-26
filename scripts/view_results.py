@@ -25,7 +25,7 @@ query_prefix=param["query_prefix"]
 pipeline_ids=param["pipeline_ids"]
 
 planning_times=param["planning_times"]
-# planning_times=planning_times[0:2]
+planning_times=planning_times[0:6]
 tested_planners=[]
 planner_str=[]
 for pipeline_id in pipeline_ids:

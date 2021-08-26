@@ -1,6 +1,6 @@
 group_name: manipulator
 queries_number: 10   # number of tuple start-goal
-query_prefix: "DOF6_cubes"
+query_prefix: "cubes"
 repetitions: 30  #number of repetitions for each plan
 pipeline_ids:
 - dirrt
@@ -11,16 +11,7 @@ planning_times: [0.05,0.1,0.2,0.4,0.8,1.0,2.0,3.0,4.0,5.0]
 planner_ids:
   dirrt:
   - informed_rrt
-#  - mixed_strategy
-#  - mixed_strategy_extend
-#  - mixed_strategy_9901
-#  - mixed_strategy_extend_9901
-#  - mixed_strategy_9902
-#  - mixed_strategy_extend_9902
-  - mixed_strategy_99902
-  - mixed_strategy_extend_99902
+  - mixed_strategy_a
+  - mixed_strategy_b
   ompl:
-#  - BiTRRT
   - RRTstar
-#  - BFMT
-#  - LazyPRMstar

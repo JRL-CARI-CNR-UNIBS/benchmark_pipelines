@@ -88,7 +88,7 @@ int main(int argc, char **argv)
   }
 
   int queries_number=100;
-  if (!pnh.getParam(query_prefix+"/queries_number",queries_number))
+  if (!pnh.getParam("queries_number",queries_number))
   {
     ROS_ERROR("%s/queries_number not defined",pnh.getNamespace().c_str());
     return 0;
@@ -162,7 +162,6 @@ int main(int argc, char **argv)
           pnh.getParam(query_prefix+"/query_"+std::to_string(actual_query_number)+"/start_configuration",start_configuration);
           pnh.getParam(query_prefix+"/query_"+std::to_string(actual_query_number)+"/goal_configuration" ,goal_configuration);
 
-
           state.setJointGroupPositions(group_name,start_configuration);
           state.update();
           move_group.setStartState(state);
@@ -174,18 +173,30 @@ int main(int argc, char **argv)
           moveit::planning_interface::MoveGroupInterface::Plan plan;
           for (int repetition=0;repetition<repetitions;repetition++)
           {
-            moveit::planning_interface::MoveItErrorCode plan_exit_code = move_group.plan(plan);
+            double length=std::numeric_limits<double>::infinity();
 
-
-            std::string result_prefix=query_prefix+"/query_"+std::to_string(actual_query_number)+"/"+pipeline_id+"/"+planner_id+"/iteration_"+std::to_string(repetition)+"/planning_time_ms_"+std::to_string((int)(1000.0*planning_time));
-
-            pnh.setParam(result_prefix+"/planning_time",plan.planning_time_);
-            pnh.setParam(result_prefix+"/error_code",plan_exit_code.val);
-            if (plan_exit_code)
+            int tmp_rep=(pipeline_id=="dirrt")?4:1; // ompl runs 4 thread in parallel
+            for (int itmp=0;itmp<tmp_rep;itmp++)
             {
-              pnh.setParam(result_prefix+"/trajectory_time",plan.trajectory_.joint_trajectory.points.back().time_from_start.toSec());
-              double length=trajectory_processing::computeTrajectoryLength(plan.trajectory_.joint_trajectory);
-              pnh.setParam(result_prefix+"/trajectory_length",length);
+              moveit::planning_interface::MoveItErrorCode plan_exit_code = move_group.plan(plan);
+              std::string result_prefix=query_prefix+"/query_"+std::to_string(actual_query_number)+"/"+pipeline_id+"/"+planner_id+"/iteration_"+std::to_string(repetition)+"/planning_time_ms_"+std::to_string((int)(1000.0*planning_time));
+
+              bool improved=false;
+              if (plan_exit_code)
+              {
+                double length1=trajectory_processing::computeTrajectoryLength(plan.trajectory_.joint_trajectory);
+                if (length1<length)
+                {
+                  length=length1;
+                  pnh.setParam(result_prefix+"/trajectory_time",plan.trajectory_.joint_trajectory.points.back().time_from_start.toSec());
+                  pnh.setParam(result_prefix+"/trajectory_length",length);
+                }
+              }
+              if (improved || itmp==0)
+              {
+                pnh.setParam(result_prefix+"/planning_time",plan.planning_time_);
+                pnh.setParam(result_prefix+"/error_code",plan_exit_code.val);
+              }
             }
           }
           actual_query_number++;

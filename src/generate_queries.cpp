@@ -49,6 +49,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <rosparam_utilities/rosparam_utilities.h>
 #include <geometry_msgs/PoseStamped.h>
 #include <eigen_conversions/eigen_msg.h>
+#include <moveit_planning_helper/manage_trajectories.h>
 
 int main(int argc, char **argv)
 {
@@ -84,6 +85,7 @@ int main(int argc, char **argv)
 
 
   moveit::planning_interface::MoveGroupInterface move_group(group_name);
+  move_group.setPlanningTime(1);
 
   std::shared_ptr<tf2_ros::Buffer> tf_buffer = std::make_shared<tf2_ros::Buffer>();
   std::shared_ptr<tf2_ros::TransformListener> tf_listener = std::make_shared<tf2_ros::TransformListener>(*tf_buffer, nh);
@@ -103,8 +105,11 @@ int main(int argc, char **argv)
   scene.setPlanningSceneMsg(srv.response.scene);
   moveit_msgs::PlanningScene scene_msg;
   scene.getPlanningSceneMsg(scene_msg);
-  ROS_INFO_STREAM("scene = \n\n" <<scene_msg);
   moveit::core::RobotState state(*move_group.getCurrentState());
+  std::vector<double> configuration;
+  state.copyJointGroupPositions(group_name,configuration);
+  query_prefix+="_dof_"+std::to_string(configuration.size());
+  pnh.setParam("query_prefix",query_prefix);
 
   int actual_query_number=0;
   while (actual_query_number<queries_number)
@@ -118,6 +123,7 @@ int main(int argc, char **argv)
     std::vector<double> start_configuration;
     std::vector<double> goal_configuration;
     state.copyJointGroupPositions(group_name,start_configuration);
+    move_group.setStartState(state);
 
     state.setToRandomPositions();
     state.update();
@@ -126,7 +132,24 @@ int main(int argc, char **argv)
       continue;
     }
     state.copyJointGroupPositions(group_name,goal_configuration);
+    move_group.setJointValueTarget(state);
 
+    moveit::planning_interface::MoveGroupInterface::Plan plan;
+    moveit::planning_interface::MoveItErrorCode plan_exit_code = move_group.plan(plan);
+    if (not plan_exit_code)
+    {
+      continue;
+    }
+    double length=trajectory_processing::computeTrajectoryLength(plan.trajectory_.joint_trajectory);
+    double utopia=0;
+    for (size_t idx=0;idx<start_configuration.size();idx++)
+      utopia+=std::pow(start_configuration.at(idx)-goal_configuration.at(idx),2);
+    utopia=std::sqrt(utopia);
+    if (length<1.0001*utopia)
+    {
+      ROS_DEBUG_STREAM("directed connection,skip");
+      continue;
+    }
     std::string query_name=query_prefix;
     pnh.setParam(query_prefix+"/query_"+std::to_string(actual_query_number)+"/start_configuration",start_configuration);
     pnh.setParam(query_prefix+"/query_"+std::to_string(actual_query_number)+"/goal_configuration" ,goal_configuration);
