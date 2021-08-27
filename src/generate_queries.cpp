@@ -109,7 +109,7 @@ int main(int argc, char **argv)
   std::vector<double> configuration;
   state.copyJointGroupPositions(group_name,configuration);
   query_prefix+="_dof_"+std::to_string(configuration.size());
-  pnh.setParam("query_prefix",query_prefix);
+  pnh.setParam("query_test",query_prefix);
 
   int actual_query_number=0;
   while (actual_query_number<queries_number)

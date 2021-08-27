@@ -80,10 +80,10 @@ int main(int argc, char **argv)
     return 0;
   }
 
-  std::string query_prefix;
-  if (!pnh.getParam("query_prefix",query_prefix))
+  std::string query_test;
+  if (!pnh.getParam("query_test",query_test))
   {
-    ROS_ERROR("%s/query_prefix not defined",pnh.getNamespace().c_str());
+    ROS_ERROR("%s/query_test not defined",pnh.getNamespace().c_str());
     return 0;
   }
 
@@ -129,38 +129,35 @@ int main(int argc, char **argv)
 
   ros::Duration(1).sleep();
   move_group.startStateMonitor();
-
+  move_group.setNumPlanningAttempts(1);
 
   moveit::core::RobotState state(*move_group.getCurrentState());
 
 
-  for (const double& planning_time: planning_times)
+  for (int actual_query_number=0;actual_query_number<queries_number;actual_query_number++)
   {
+    for (const double& planning_time: planning_times)
+    {
 
-    move_group.setPlanningTime(planning_time);
     for (const std::string& pipeline_id: pipeline_ids)
     {
       for (const std::string& planner_id: planner_ids.at(pipeline_id))
       {
+          ROS_INFO("PIPELINE = %s, PLANNER = %s. Planning time = %f.  = Query %d.",pipeline_id.c_str(),planner_id.c_str(),planning_time,actual_query_number);
+          move_group.setPlanningTime(planning_time);
+          move_group.setPlanningPipelineId(pipeline_id);
+          move_group.setPlannerId(planner_id);
 
-        move_group.setPlanningPipelineId(pipeline_id);
-        move_group.setPlannerId(planner_id);
-
-        ROS_INFO("PIPELINE = %s, PLANNER = %s. Planning time = %f",pipeline_id.c_str(),planner_id.c_str(),planning_time);
-
-        int actual_query_number=0;
-        while (actual_query_number<queries_number)
-        {
           ROS_DEBUG("PIPELINE = %s, PLANNER = %s. query %d of %d",pipeline_id.c_str(),planner_id.c_str(),actual_query_number+1,queries_number);
           planner_id_msg.data=pipeline_id+"/"+planner_id+" query "+std::to_string(actual_query_number);
           planner_pub.publish(planner_id_msg);
 
-          std::string query_name=query_prefix;
+          std::string query_name=query_test;
           std::vector<double> start_configuration;
           std::vector<double> goal_configuration;
 
-          pnh.getParam(query_prefix+"/query_"+std::to_string(actual_query_number)+"/start_configuration",start_configuration);
-          pnh.getParam(query_prefix+"/query_"+std::to_string(actual_query_number)+"/goal_configuration" ,goal_configuration);
+          pnh.getParam(query_test+"/query_"+std::to_string(actual_query_number)+"/start_configuration",start_configuration);
+          pnh.getParam(query_test+"/query_"+std::to_string(actual_query_number)+"/goal_configuration" ,goal_configuration);
 
           state.setJointGroupPositions(group_name,start_configuration);
           state.update();
@@ -175,11 +172,11 @@ int main(int argc, char **argv)
           {
             double length=std::numeric_limits<double>::infinity();
 
-            int tmp_rep=(pipeline_id=="dirrt")?4:1; // ompl runs 4 thread in parallel
+            int tmp_rep=(pipeline_id=="dirrt")?1:1; // ompl runs 4 thread in parallel
             for (int itmp=0;itmp<tmp_rep;itmp++)
             {
               moveit::planning_interface::MoveItErrorCode plan_exit_code = move_group.plan(plan);
-              std::string result_prefix=query_prefix+"/query_"+std::to_string(actual_query_number)+"/"+pipeline_id+"/"+planner_id+"/iteration_"+std::to_string(repetition)+"/planning_time_ms_"+std::to_string((int)(1000.0*planning_time));
+              std::string result_prefix=query_test+"/query_"+std::to_string(actual_query_number)+"/"+pipeline_id+"/"+planner_id+"/iteration_"+std::to_string(repetition)+"/planning_time_ms_"+std::to_string((int)(1000.0*planning_time));
 
               bool improved=false;
               if (plan_exit_code)
@@ -198,13 +195,12 @@ int main(int argc, char **argv)
                 pnh.setParam(result_prefix+"/error_code",plan_exit_code.val);
               }
             }
-          }
-          actual_query_number++;
-        }
-      }
-    }
-    system("rosparam dump benchmark_result.yaml /benchmark");
-  }
+          }  // for each repetion
+        }  // for each planner
+      }  // for each pipeline
+      system("rosparam dump benchmark_result.yaml /benchmark");
+    }  // for each planning time
+  }  // for each query
 
   return 0;
 }
