@@ -2,6 +2,8 @@
 30 repetitions
 10 queries
 
+NOTA per confrontare i metodi, calcolare in quante query uno è meglio dell'altro al variare del tempo di calcolo.
+magari si può anche calcolare il valore atteso di mediana(costo_tempo_t)/miglior_soluzione
 
 ## Query 00
 ![query 00](cubes_dof_9query_0.png)
