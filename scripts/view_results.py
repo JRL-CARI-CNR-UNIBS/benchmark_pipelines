@@ -25,7 +25,7 @@ query_prefix=param["query_prefix"]
 pipeline_ids=param["pipeline_ids"]
 
 planning_times=param["planning_times"]
-# planning_times=planning_times[0:2]
+planning_times=planning_times[0:3]
 tested_planners=[]
 planner_str=[]
 for pipeline_id in pipeline_ids:
@@ -78,7 +78,8 @@ for iquery in range(0,queries_number):
                 tot_planning_time[iplanner][iplan_time]+=result["planning_time"]
                 query_planning_time[iplanner][iplan_time]+=result["planning_time"]
             min_length=min(min_length,np.min(trajectory_length))
-            median_length[iplanner][iplan_time]=np.median(trajectory_length)
+            #median_length[iplanner][iplan_time]=np.median(trajectory_length)
+            median_length[iplanner][iplan_time]=np.percentile(trajectory_length,10)
             tot_median_length[iplanner][iplan_time]+=median_length[iplanner][iplan_time]
             tot_failures[iplanner][iplan_time]+=failures[iplanner][iplan_time]
     fig, axs = plt.subplots(2)
