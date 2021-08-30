@@ -68,6 +68,14 @@ int main(int argc, char **argv)
     return 0;
   }
 
+
+  int starting_query=0;
+  if (!pnh.getParam("starting_query",starting_query))
+  {
+    ROS_INFO("%s/starting_query not defined, using 0",pnh.getNamespace().c_str());
+    starting_query= 0;
+  }
+
   int queries_number=100;
   if (!pnh.getParam("queries_number",queries_number))
   {
@@ -111,7 +119,7 @@ int main(int argc, char **argv)
   query_prefix+="_dof_"+std::to_string(configuration.size());
   pnh.setParam("query_test",query_prefix);
 
-  int actual_query_number=0;
+  int actual_query_number=starting_query;
   while (actual_query_number<queries_number)
   {
     state.setToRandomPositions();

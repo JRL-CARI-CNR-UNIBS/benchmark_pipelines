@@ -94,6 +94,13 @@ int main(int argc, char **argv)
     return 0;
   }
 
+  int starting_query=0;
+  if (!pnh.getParam("starting_query",starting_query))
+  {
+    ROS_INFO("%s/starting_query not defined, using 0",pnh.getNamespace().c_str());
+    starting_query= 0;
+  }
+
   std::vector<double> planning_times;
   if (!pnh.getParam("planning_times",planning_times))
   {
@@ -134,7 +141,7 @@ int main(int argc, char **argv)
   moveit::core::RobotState state(*move_group.getCurrentState());
 
 
-  for (int actual_query_number=0;actual_query_number<queries_number;actual_query_number++)
+  for (int actual_query_number=starting_query;actual_query_number<queries_number;actual_query_number++)
   {
     for (const double& planning_time: planning_times)
     {
