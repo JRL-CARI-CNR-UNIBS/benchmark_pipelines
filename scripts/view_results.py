@@ -17,7 +17,7 @@ load_from_parameter_server=False
 if load_from_parameter_server:
    param=rospy.get_param("/benchmark")
 else:
-   with open('benchmark_result_9.yaml') as f:
+   with open('benchamrk6dof.yaml') as f:
        param = yaml.safe_load(f)
 
 queries_number=param["queries_number"]
@@ -47,7 +47,7 @@ tot_failures=np.zeros([len(tested_planners),len(planning_times)])
 tot_planning_time=np.zeros([len(tested_planners),len(planning_times)])
 marker=[]
 
-for iquery in range(0,queries_number):
+for iquery in range(1,queries_number):
     query_str="query_"+str(iquery)
     q=param[query_prefix][query_str];
 
