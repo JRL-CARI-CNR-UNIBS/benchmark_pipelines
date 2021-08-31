@@ -42,7 +42,7 @@ tot_median_length[:]=0
 tot_failures=np.zeros([len(tested_planners),len(planning_times)])
 tot_planning_time=np.zeros([len(tested_planners),len(planning_times)])
 marker=[]
-for iquery in range(0,queries_number):
+for iquery in range(1,queries_number):
     query_str="query_"+str(iquery)
     q=param[query_prefix][query_str];
 
