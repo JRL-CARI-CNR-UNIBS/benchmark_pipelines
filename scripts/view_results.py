@@ -12,12 +12,12 @@ import math
 import matplotlib.pyplot as plt
 
 
-load_from_parameter_server=True
+load_from_parameter_server=False
 
 if load_from_parameter_server:
    param=rospy.get_param("/benchmark")
 else:
-   with open('../config/result_query01_3dof.yaml') as f:
+   with open('benchmark_result_9.yaml') as f:
        param = yaml.safe_load(f)
 
 queries_number=param["queries_number"]
@@ -35,13 +35,18 @@ for pipeline_id in pipeline_ids:
         tested_planners.append([pipeline_id,planner_id])
         planner_str.append(planner_id)
 
+tested_planners=tested_planners[0:2]
 tot_min_length=0
 tot_median_length=np.empty([len(tested_planners),len(planning_times)])
 tot_median_length[:]=0
 
+#cost_over_time=np.empty([len(planning_times),len(tested_planners),queries_number])
+median_cost_over_time=[]
+
 tot_failures=np.zeros([len(tested_planners),len(planning_times)])
 tot_planning_time=np.zeros([len(tested_planners),len(planning_times)])
 marker=[]
+
 for iquery in range(0,queries_number):
     query_str="query_"+str(iquery)
     q=param[query_prefix][query_str];
@@ -49,6 +54,7 @@ for iquery in range(0,queries_number):
 
     min_length=math.inf
     median_length=np.empty([len(tested_planners),len(planning_times)])
+    lengths=np.empty([len(tested_planners),len(planning_times),repetitions])
     median_length[:]=np.Inf
     failures=np.zeros([len(tested_planners),len(planning_times)])
     query_planning_time=np.zeros([len(tested_planners),len(planning_times)])
@@ -85,6 +91,7 @@ for iquery in range(0,queries_number):
                     query_planning_time[iplanner][iplan_time]=np.inf
             min_length=min(min_length,np.min(trajectory_length))
             median_length[iplanner][iplan_time]=np.median(trajectory_length)
+            lengths[iplanner][iplan_time]=trajectory_length
             tot_median_length[iplanner][iplan_time]+=median_length[iplanner][iplan_time]
             tot_failures[iplanner][iplan_time]+=failures[iplanner][iplan_time]
     fig, axs = plt.subplots(2)
@@ -93,6 +100,24 @@ for iquery in range(0,queries_number):
         #axs[0].semilogy(query_planning_time[iplanner]/repetitions,np.log10(median_length[iplanner]/min_length),"-"+marker[iplanner], label=planner_str[iplanner])
         axs[0].semilogy(query_planning_time[iplanner]/repetitions,(median_length[iplanner]/min_length),"-"+marker[iplanner], label=planner_str[iplanner])
         axs[1].plot(np.array(planning_times),failures[iplanner],marker[iplanner], label=planner_str[iplanner])
+
+    for iplanner in range(0,len(tested_planners)):
+        for iplan_time in range(0,len(planning_times)):
+            for iteration in range(0,repetitions):
+                entry={'planning_time': planning_times[iplan_time],
+                   'planner': tested_planners[iplanner][1],
+                   'length': min(median_length[iplanner][iplan_time]/min_length,10),
+                   }
+                cost_over_time.append(entry)
+    for iplanner in range(0,len(tested_planners)):
+        for iplan_time in range(0,len(planning_times)):
+            
+            #cost_over_time[iplan_time][iplanner][iquery]=median_length[iplanner][iplan_time]/min_length
+            entry={'planning_time': planning_times[iplan_time],
+                   'planner': tested_planners[iplanner][1],
+                   'length': min(median_length[iplanner][iplan_time]/min_length,10),
+                   }
+            median_cost_over_time.append(entry)
     axs[0].legend()
     axs[0].set(xlabel="Max planning time",ylabel="Path length/min(path length))",title=str(query_prefix+"_"+query_str))
     axs[0].grid(True)

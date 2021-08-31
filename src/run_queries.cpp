@@ -205,8 +205,8 @@ int main(int argc, char **argv)
           }  // for each repetion
         }  // for each planner
       }  // for each pipeline
-      system("rosparam dump benchmark_result.yaml /benchmark");
     }  // for each planning time
+    system("rosparam dump benchmark_result.yaml /benchmark");
   }  // for each query
 
   return 0;
