@@ -14,7 +14,7 @@ import seaborn
 import pandas as pd
 
 load_from_parameter_server=False
-dof=12
+dof=18
 test_name='benchmark_result_'+str(dof)+'.yaml'
 
 if load_from_parameter_server:
