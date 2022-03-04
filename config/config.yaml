@@ -1,6 +1,6 @@
 group_name: manipulator
 starting_query: 0
-queries_number: 30   # number of tuple start-goal
+#queries_number: 10   # number of tuple start-goal
 query_prefix: "cubes"
 repetitions: 30  #number of repetitions for each plan
 pipeline_ids:
@@ -11,8 +11,9 @@ planning_times: [0.05,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1.0,1.5,2.0,3.0,4.0,5.
 #planning_times: [0.05,0.1,1.0,5.0]
 planner_ids:
   dirrt:
-  - informed_rrt
+  #- informed_rrt
   - mixed_strategy_b
+  # - warp_strategy
   #- RRTstar
   ompl:
   - RRTstar

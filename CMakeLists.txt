@@ -13,10 +13,11 @@ find_package(catkin REQUIRED COMPONENTS
   name_sorting
   roscpp
   moveit_planning_helper
+  rosparam_utilities
 )
 
 catkin_package(
-  CATKIN_DEPENDS actionlib actionlib_msgs eigen_conversions eigen_matrix_utils moveit_core moveit_ros_planning moveit_ros_planning_interface moveit_visual_tools name_sorting roscpp moveit_planning_helper
+  CATKIN_DEPENDS actionlib actionlib_msgs eigen_conversions eigen_matrix_utils moveit_core moveit_ros_planning moveit_ros_planning_interface moveit_visual_tools name_sorting roscpp moveit_planning_helper rosparam_utilities
   DEPENDS
 )
 include_directories(

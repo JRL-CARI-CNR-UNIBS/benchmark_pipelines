@@ -3,7 +3,7 @@
 <launch>
 
 <node pkg="benchmark_pipelines"  type="run_queries" name="benchmark" output="screen">
-  <!-- <rosparam command="load" file="$(find benchmark_pipelines)/config/DOF6BENCHMARK.yaml"/> -->
+   <rosparam command="load" file="$(find benchmark_pipelines)/config/config.yaml"/>
 </node>
 
 </launch>

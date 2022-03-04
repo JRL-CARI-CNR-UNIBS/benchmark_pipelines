@@ -80,7 +80,8 @@
   <exec_depend>name_sorting</exec_depend>
   <exec_depend>roscpp</exec_depend>
 
-<depend>moveit_planning_helper</depend>
+  <depend>moveit_planning_helper</depend>
+  <depend>rosparam_utilities</depend>
 
   <!-- The export tag contains other, unspecified, tags -->
   <export>
