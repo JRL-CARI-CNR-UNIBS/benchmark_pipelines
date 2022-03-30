@@ -1,5 +1,5 @@
 group_name: manipulator
-starting_query: 0
+starting_query: 1
 #queries_number: 10   # number of tuple start-goal
 query_prefix: "cubes"
 repetitions: 30  #number of repetitions for each plan

@@ -45,7 +45,8 @@ for dof in [6]: #[6, 9,12,18]:
     #planner_name=["Informed RRT*","Mixed-strategy RRT*"]
 
     tested_planners=tested_planners[0:4]
-    planner_name=["Informed RRT*","Mixed-strategy RRT*","Wrap RRT*","Mixed + Wrap once"]
+    print(tested_planners)
+    planner_name=["Informed RRT*","Mixed-strategy RRT*","Wrap RRT*","Mixed + Wrap"]
     #planner_name=["Informed RRT*","Mixed-strategy RRT*","Wrap RRT*",]
 
     for iquery in range(0,queries_number):
@@ -92,7 +93,7 @@ for dof in [6]: #[6, 9,12,18]:
 
     a4_dims = (11.7, 8.27)
     db1=pd.DataFrame(cost_over_time)
-    sel_planning_times=[0.05,0.2,0.5,1,3,5,10]
+    sel_planning_times=[0.05,0.2,0.5,1,2,3,5,10]
     db2=db1.loc[db1['Planning time [s]'].isin(sel_planning_times),:]
 
     # fig, ax = plt.subplots(figsize=a4_dims);
