@@ -182,7 +182,7 @@ int main(int argc, char **argv)
             int tmp_rep=(pipeline_id=="dirrt")?1:1; // ompl runs 4 thread in parallel
             for (int itmp=0;itmp<tmp_rep;itmp++)
             {
-              moveit::planning_interface::MoveItErrorCode plan_exit_code = move_group.plan(plan);
+              moveit::core::MoveItErrorCode plan_exit_code = move_group.plan(plan);
               std::string result_prefix=query_test+"/query_"+std::to_string(actual_query_number)+"/"+pipeline_id+"/"+planner_id+"/iteration_"+std::to_string(repetition)+"/planning_time_ms_"+std::to_string((int)(1000.0*planning_time));
 
               bool improved=false;

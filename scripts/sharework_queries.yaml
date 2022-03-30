@@ -1,0 +1,40 @@
+sharework_dof_6:
+  queries_number: 1
+  query_0:
+    goal_configuration: [-1.9978238552055394, -1.5726476084741488, -1.9165522312272538, -1.213286538112895, -1.5927963010858777, 0.34319917283353035]
+    start_configuration: [-0.9767976867286801, -1.5655834552771755, -1.9165522312272538, -1.213286538112895, -1.5927963010858777, 0.34319917283353035]
+
+group_name: manipulator
+pipeline_ids:
+- dirrt
+planner_ids:
+  dirrt:
+  - informed_rrt
+  - dirrt_paper
+  - warp_strategy
+  - dirrt_paper_warp
+  ompl:
+  - RRTstar
+planning_times:
+# - 0.05
+# - 0.1
+# - 0.2
+# - 0.3
+# - 0.4
+# - 0.5
+# - 0.6
+# - 0.7
+# - 0.8
+# - 0.9
+# - 1.0
+# - 1.5
+# - 2.0
+# - 3.0
+# - 4.0
+- 5.0
+- 10.0
+queries_number: 1
+query_prefix: cubes
+query_test: sharework_dof_6
+repetitions: 10 #30
+starting_query: 0

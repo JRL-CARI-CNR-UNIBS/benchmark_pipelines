@@ -44,8 +44,9 @@ for dof in [6]: #[6, 9,12,18]:
     #tested_planners=tested_planners[0:2]
     #planner_name=["Informed RRT*","Mixed-strategy RRT*"]
 
-    tested_planners=tested_planners[0:3]
-    planner_name=["Informed RRT*","Mixed-strategy RRT*","Wrap RRT*",]
+    tested_planners=tested_planners[0:4]
+    planner_name=["Informed RRT*","Mixed-strategy RRT*","Wrap RRT*","Mixed + Wrap once"]
+    #planner_name=["Informed RRT*","Mixed-strategy RRT*","Wrap RRT*",]
 
     for iquery in range(0,queries_number):
         query_str="query_"+str(iquery)
@@ -59,6 +60,7 @@ for dof in [6]: #[6, 9,12,18]:
         for iplanner in range(0,len(tested_planners)):
             pipeline=tested_planners[iplanner][0]
             planner=tested_planners[iplanner][1]
+
             for iplan_time in range(0,len(planning_times)):
                 planning_time=planning_times[iplan_time]
                 planning_time_string='planning_time_ms_'+str(int(1000*planning_time))
@@ -90,15 +92,24 @@ for dof in [6]: #[6, 9,12,18]:
 
     a4_dims = (11.7, 8.27)
     db1=pd.DataFrame(cost_over_time)
-    sel_planning_times=[0.05,0.2,0.5,1,3,5]
+    sel_planning_times=[0.05,0.2,0.5,1,3,5,10]
     db2=db1.loc[db1['Planning time [s]'].isin(sel_planning_times),:]
-    #fig, ax = plt.subplots(figsize=a4_dims);
-    #seaborn.violinplot(x="Planning time [s]",y="Normalized length",hue="planner",data=db2,split=True, inner=None,cut=False,scale="width")
-    #plt.grid()
-    #fig.savefig("violin_dof"+str(dof)+".png",dpi=300)
+
+    # fig, ax = plt.subplots(figsize=a4_dims);
+    # seaborn.set_context("paper", rc={"font.size":18,"axes.titlesize":18,"axes.labelsize":18,"legend.fontsize":18, "xtick.labelsize": 18, "ytick.labelsize":18})
+    # g=seaborn.violinplot(hue="planner",y="Normalized length",data=db2,x="Planning time [s]", palette="deep")
+    # seaborn.violinplot(x="Planning time [s]",y="Normalized length",hue="planner",data=db2, inner=None,cut=False,scale="width")
+    # plt.grid()
+    # fig.savefig("violin_dof"+str(dof)+".png",dpi=300)
 
     fig, ax = plt.subplots(figsize=a4_dims);
     seaborn.set_context("paper", rc={"font.size":18,"axes.titlesize":18,"axes.labelsize":18,"legend.fontsize":18, "xtick.labelsize": 18, "ytick.labelsize":18})
     g=seaborn.boxenplot(hue="planner",y="Normalized length",data=db2,x="Planning time [s]", palette="deep")
     g.grid()
     fig.savefig("boxen_dof"+str(dof)+".png",dpi=300, bbox_inches = 'tight')
+
+    fig, ax = plt.subplots(figsize=a4_dims);
+    seaborn.set_context("paper", rc={"font.size":18,"axes.titlesize":18,"axes.labelsize":18,"legend.fontsize":18, "xtick.labelsize": 18, "ytick.labelsize":18})
+    g=seaborn.boxplot(hue="planner",y="Normalized length",data=db2,x="Planning time [s]", palette="deep")
+    g.grid()
+    fig.savefig("box_dof"+str(dof)+".png",dpi=300, bbox_inches = 'tight')
