@@ -129,10 +129,6 @@ int main(int argc, char **argv)
 
 
   moveit::planning_interface::MoveGroupInterface move_group(group_name);
-  std::shared_ptr<tf2_ros::Buffer> tf_buffer = std::make_shared<tf2_ros::Buffer>();
-  std::shared_ptr<tf2_ros::TransformListener> tf_listener = std::make_shared<tf2_ros::TransformListener>(*tf_buffer, nh);
-
-  robot_model_loader::RobotModelLoaderPtr robot_model_loader=std::make_shared<robot_model_loader::RobotModelLoader>("robot_description");
 
   ros::Duration(1).sleep();
   move_group.startStateMonitor();

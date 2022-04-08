@@ -12,8 +12,8 @@ import matplotlib.pyplot as plt
 import seaborn
 import pandas as pd
 
-load_from_parameter_server=True
-for dof in [6]: #[6, 9,12,18]:
+load_from_parameter_server=False
+for dof in [6, 9,12,18]:
     test_name='benchmark_result_'+str(dof)+'b.yaml'
 
     if load_from_parameter_server:
@@ -44,9 +44,13 @@ for dof in [6]: #[6, 9,12,18]:
     #tested_planners=tested_planners[0:2]
     #planner_name=["Informed RRT*","Mixed-strategy RRT*"]
 
-    tested_planners=tested_planners[0:4]
-    print(tested_planners)
-    planner_name=["Informed RRT*","Mixed-strategy RRT*","Wrap RRT*","Mixed + Wrap"]
+    tested_planners=tested_planners[0:3]
+
+
+    t=[tested_planners[0],tested_planners[2],tested_planners[1]]
+    print(t)
+    tested_planners=t;
+    planner_name=["Informed RRT*","Wrap RRT*","Mixed-strategy RRT*","Mixed + Wrap"]
     #planner_name=["Informed RRT*","Mixed-strategy RRT*","Wrap RRT*",]
 
     for iquery in range(0,queries_number):
@@ -93,7 +97,8 @@ for dof in [6]: #[6, 9,12,18]:
 
     a4_dims = (11.7, 8.27)
     db1=pd.DataFrame(cost_over_time)
-    sel_planning_times=[0.05,0.2,0.5,1,2,3,5,10]
+    #sel_planning_times=[0.05,0.2,0.5,1,2,3,5,10]
+    sel_planning_times=[0.5,1,2,5,10]
     db2=db1.loc[db1['Planning time [s]'].isin(sel_planning_times),:]
 
     # fig, ax = plt.subplots(figsize=a4_dims);
@@ -106,11 +111,15 @@ for dof in [6]: #[6, 9,12,18]:
     fig, ax = plt.subplots(figsize=a4_dims);
     seaborn.set_context("paper", rc={"font.size":18,"axes.titlesize":18,"axes.labelsize":18,"legend.fontsize":18, "xtick.labelsize": 18, "ytick.labelsize":18})
     g=seaborn.boxenplot(hue="planner",y="Normalized length",data=db2,x="Planning time [s]", palette="deep")
+    ax.set(ylim=(1, 10))
+    seaborn.set_context("paper", rc={"font.size":18,"axes.titlesize":18,"axes.labelsize":18,"legend.fontsize":18, "xtick.labelsize": 18, "ytick.labelsize":18})
     g.grid()
     fig.savefig("boxen_dof"+str(dof)+".png",dpi=300, bbox_inches = 'tight')
 
     fig, ax = plt.subplots(figsize=a4_dims);
     seaborn.set_context("paper", rc={"font.size":18,"axes.titlesize":18,"axes.labelsize":18,"legend.fontsize":18, "xtick.labelsize": 18, "ytick.labelsize":18})
     g=seaborn.boxplot(hue="planner",y="Normalized length",data=db2,x="Planning time [s]", palette="deep")
+    ax.set(ylim=(1, 10))
+    seaborn.set_context("paper", rc={"font.size":18,"axes.titlesize":18,"axes.labelsize":18,"legend.fontsize":18, "xtick.labelsize": 18, "ytick.labelsize":18})
     g.grid()
     fig.savefig("box_dof"+str(dof)+".png",dpi=300, bbox_inches = 'tight')
