@@ -41,7 +41,8 @@ def run():
     filename=rospy.get_param('~csv_name')
     figure_folder=rospy.get_param('~figure_folder')
     res=pd.read_csv(filename)
-
+    
+    x_lim=rospy.get_param('~axis_xlim')
 
     normalized_res=res.copy()
     for q in range(res["query"].min(),res["query"].max()+1):
@@ -85,7 +86,7 @@ def run():
                 g.grid()
                 g.set_xlabel("Planning time [s]", fontsize = 18)
                 g.set_ylabel("Normalized length", fontsize = 18)
-                ax.set(xlim=(0, 0.5))
+                ax.set(xlim=(0, x_lim))
                 fig.savefig(name+".png",dpi=300, bbox_inches = 'tight')
 
                 fig, ax = plt.subplots(figsize=a4_dims);
@@ -93,7 +94,7 @@ def run():
                 g.grid()
                 g.set_xlabel("Planning time [s]", fontsize = 18)
                 g.set_ylabel("Iterations", fontsize = 18)
-                ax.set(xlim=(0, 0.5))
+                ax.set(xlim=(0, x_lim))
                 fig.savefig(name+"_iter.png",dpi=300, bbox_inches = 'tight')
 
 
@@ -102,7 +103,7 @@ def run():
                 g.grid()
                 g.set_xlabel("Iterations", fontsize = 18)
                 g.set_ylabel("Normalized length", fontsize = 18)
-                ax.set(xlim=(0, 2))
+                ax.set(xlim=(0, x_lim))
                 fig.savefig(name+"_cost_iter.png",dpi=300, bbox_inches = 'tight')
 
                 for q in range(res["query"].min(),res["query"].max()+1):
@@ -113,7 +114,7 @@ def run():
                     g.set_xlabel("Planning time [s]", fontsize = 18)
                     g.set_ylabel("Normalized length", fontsize = 18)
                     g.grid()
-                    ax.set(xlim=(0, 0.5))
+                    ax.set(xlim=(0, x_lim))
                     fig.savefig(name+"_query_"+str(q)+".png",dpi=300, bbox_inches = 'tight')
 
                     fig, ax = plt.subplots(figsize=a4_dims);
@@ -121,7 +122,7 @@ def run():
                     g.grid()
                     g.set_xlabel("Iterations", fontsize = 18)
                     g.set_ylabel("Normalized length", fontsize = 18)
-                    ax.set(xlim=(0, 0.5))
+                    ax.set(xlim=(0, x_lim))
                     fig.savefig(name+"_query_"+str(q)+"_iter.png",dpi=300, bbox_inches = 'tight')
 
 
