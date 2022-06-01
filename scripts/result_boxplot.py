@@ -43,6 +43,7 @@ def run():
     res=pd.read_csv(filename)
     normalized_res=res.copy()
     boxplot_planning_times=rospy.get_param('~boxplot_planning_times')
+    axis_ylim = rospy.get_param('~axis_ylim')
 
 
     for q in range(res["query"].min(),res["query"].max()+1):
@@ -89,7 +90,7 @@ def run():
                 fig, ax = plt.subplots(figsize=a4_dims);
                 seaborn.set_context("paper", rc={"font.size":18,"axes.titlesize":18,"axes.labelsize":18,"legend.fontsize":18, "xtick.labelsize": 18, "ytick.labelsize":18})
                 g=seaborn.boxplot(hue="planner",y="cost",data=db2,x="time", palette="deep", hue_order=planner_names, showfliers = False)
-                #ax.set(ylim=(1, 3))
+                #ax.set(ylim=(1, axis_ylim))
                 seaborn.set_context("paper", rc={"font.size":18,"axes.titlesize":18,"axes.labelsize":18,"legend.fontsize":18, "xtick.labelsize": 18, "ytick.labelsize":18})
                 g.set_xlabel("Planning time [s]", fontsize = 18)
                 g.set_ylabel("Normalized length", fontsize = 18)
@@ -102,7 +103,7 @@ def run():
                     fig, ax = plt.subplots(figsize=a4_dims);
                     seaborn.set_context("paper", rc={"font.size":18,"axes.titlesize":18,"axes.labelsize":18,"legend.fontsize":18, "xtick.labelsize": 18, "ytick.labelsize":18})
                     g=seaborn.boxplot(hue="planner",y="cost",data=query_res,x="time", palette="deep", hue_order=planner_names, showfliers = False)
-                    #ax.set(ylim=(1, 3))
+                    #ax.set(ylim=(1, axis_ylim))
                     seaborn.set_context("paper", rc={"font.size":18,"axes.titlesize":18,"axes.labelsize":18,"legend.fontsize":18, "xtick.labelsize": 18, "ytick.labelsize":18})
                     g.set_xlabel("Planning time [s]", fontsize = 18)
                     g.set_ylabel("Normalized length", fontsize = 18)

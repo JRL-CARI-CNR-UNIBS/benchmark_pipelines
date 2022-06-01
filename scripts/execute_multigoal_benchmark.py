@@ -152,10 +152,6 @@ def runQuery():
                 mg_goal.request.pipeline_id=pipeline_id
                 mg_goal.request.planner_id=planner_id
 
-
-
-
-
                 for rep in range(repetitions):
                     if rospy.is_shutdown():
                         exit()
@@ -178,7 +174,6 @@ def runQuery():
                     cost_interp = np.interp(t, time, cost)
                     iter_interp = np.round_(np.interp(t, time, itera))
                     arr=np.column_stack((t,iter_interp,cost_interp))
-
 
                     tmp = pd.DataFrame(arr, columns=["time", "iteration","cost"])
                     tmp['query']=actual_query_number
