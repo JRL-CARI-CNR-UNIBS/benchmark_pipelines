@@ -41,8 +41,11 @@ def run():
     filename=rospy.get_param('~csv_name')
     figure_folder=rospy.get_param('~figure_folder')
     res=pd.read_csv(filename)
-    
-    x_lim=rospy.get_param('~axis_xlim')
+
+    if (rospy.has_param('~axis_xlim')):
+        x_lim=rospy.get_param('~axis_xlim')
+    else:
+        x_lim=-1
 
     normalized_res=res.copy()
     for q in range(res["query"].min(),res["query"].max()+1):
@@ -62,9 +65,13 @@ def run():
     else:
         planner_names=np.unique((normalized_res["planner"]).values)
 
+    if (rospy.has_param('~plot_only_map_names')):
+        if (rospy.get_param('~plot_only_map_names')==True):
+            print("Deleting unwanted planner names.")
+            normalized_res = normalized_res[normalized_res['planner'].isin(list(planner_names_map.values()))]
+
     a4_dims = (11.7, 8.27)
     n_boot=20
-
 
     test_names=np.unique((normalized_res["test_name"]).values)
     for test_name in test_names:
@@ -86,7 +93,8 @@ def run():
                 g.grid()
                 g.set_xlabel("Planning time [s]", fontsize = 18)
                 g.set_ylabel("Normalized length", fontsize = 18)
-                ax.set(xlim=(0, x_lim))
+                if (x_lim>0):
+                    ax.set(xlim=(0, x_lim))
                 fig.savefig(name+".png",dpi=300, bbox_inches = 'tight')
 
                 fig, ax = plt.subplots(figsize=a4_dims);
@@ -94,7 +102,8 @@ def run():
                 g.grid()
                 g.set_xlabel("Planning time [s]", fontsize = 18)
                 g.set_ylabel("Iterations", fontsize = 18)
-                ax.set(xlim=(0, x_lim))
+                if (x_lim>0):
+                    ax.set(xlim=(0, x_lim))
                 fig.savefig(name+"_iter.png",dpi=300, bbox_inches = 'tight')
 
 
@@ -103,7 +112,8 @@ def run():
                 g.grid()
                 g.set_xlabel("Iterations", fontsize = 18)
                 g.set_ylabel("Normalized length", fontsize = 18)
-                ax.set(xlim=(0, x_lim))
+                if (x_lim>0):
+                    ax.set(xlim=(0, x_lim))
                 fig.savefig(name+"_cost_iter.png",dpi=300, bbox_inches = 'tight')
 
                 for q in range(res["query"].min(),res["query"].max()+1):
@@ -114,7 +124,8 @@ def run():
                     g.set_xlabel("Planning time [s]", fontsize = 18)
                     g.set_ylabel("Normalized length", fontsize = 18)
                     g.grid()
-                    ax.set(xlim=(0, x_lim))
+                    if (x_lim>0):
+                        ax.set(xlim=(0, x_lim))
                     fig.savefig(name+"_query_"+str(q)+".png",dpi=300, bbox_inches = 'tight')
 
                     fig, ax = plt.subplots(figsize=a4_dims);
@@ -122,7 +133,8 @@ def run():
                     g.grid()
                     g.set_xlabel("Iterations", fontsize = 18)
                     g.set_ylabel("Normalized length", fontsize = 18)
-                    ax.set(xlim=(0, x_lim))
+                    if (x_lim>0):
+                        ax.set(xlim=(0, x_lim))
                     fig.savefig(name+"_query_"+str(q)+"_iter.png",dpi=300, bbox_inches = 'tight')
 
 

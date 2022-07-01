@@ -43,8 +43,10 @@ def run():
     res=pd.read_csv(filename)
     normalized_res=res.copy()
     boxplot_planning_times=rospy.get_param('~boxplot_planning_times')
-    axis_ylim = rospy.get_param('~axis_ylim')
-
+    if (rospy.has_param('~axis_ylim')):
+        axis_ylim=rospy.get_param('~axis_ylim')
+    else:
+        axis_ylim=-1
 
     for q in range(res["query"].min(),res["query"].max()+1):
         min=res[res["query"]==q]["cost"].min()
@@ -66,6 +68,11 @@ def run():
         planner_names=np.unique((normalized_res["planner"]).values)
     else:
         planner_names=np.unique((normalized_res["planner"]).values)
+
+    if (rospy.has_param('~plot_only_map_names')):
+        if (rospy.get_param('~plot_only_map_names')==True):
+            print("Deleting unwanted planner names.")
+            normalized_res = normalized_res[normalized_res['planner'].isin(list(planner_names_map.values()))]
 
     a4_dims = (11.7, 8.27)
 
@@ -90,7 +97,8 @@ def run():
                 fig, ax = plt.subplots(figsize=a4_dims);
                 seaborn.set_context("paper", rc={"font.size":18,"axes.titlesize":18,"axes.labelsize":18,"legend.fontsize":18, "xtick.labelsize": 18, "ytick.labelsize":18})
                 g=seaborn.boxplot(hue="planner",y="cost",data=db2,x="time", palette="deep", hue_order=planner_names, showfliers = False)
-                #ax.set(ylim=(1, axis_ylim))
+                if (axis_ylim>1):
+                    ax.set(ylim=(1, axis_ylim))
                 seaborn.set_context("paper", rc={"font.size":18,"axes.titlesize":18,"axes.labelsize":18,"legend.fontsize":18, "xtick.labelsize": 18, "ytick.labelsize":18})
                 g.set_xlabel("Planning time [s]", fontsize = 18)
                 g.set_ylabel("Normalized length", fontsize = 18)
@@ -103,7 +111,8 @@ def run():
                     fig, ax = plt.subplots(figsize=a4_dims);
                     seaborn.set_context("paper", rc={"font.size":18,"axes.titlesize":18,"axes.labelsize":18,"legend.fontsize":18, "xtick.labelsize": 18, "ytick.labelsize":18})
                     g=seaborn.boxplot(hue="planner",y="cost",data=query_res,x="time", palette="deep", hue_order=planner_names, showfliers = False)
-                    #ax.set(ylim=(1, axis_ylim))
+                    if (axis_ylim>1):
+                        ax.set(ylim=(1, axis_ylim))
                     seaborn.set_context("paper", rc={"font.size":18,"axes.titlesize":18,"axes.labelsize":18,"legend.fontsize":18, "xtick.labelsize": 18, "ytick.labelsize":18})
                     g.set_xlabel("Planning time [s]", fontsize = 18)
                     g.set_ylabel("Normalized length", fontsize = 18)

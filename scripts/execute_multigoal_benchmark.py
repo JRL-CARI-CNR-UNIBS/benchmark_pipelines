@@ -44,6 +44,7 @@ import object_loader_msgs.srv
 
 performance=np.array([])
 received=False;
+sampling_time=0.1
 
 def performanceCallback(data):
     global array
@@ -170,7 +171,7 @@ def runQuery():
                     time=array[:,0]
                     itera=array[:,1]
                     cost=array[:,2]
-                    t=np.arange(0, planning_time, 0.01)
+                    t=np.arange(0, planning_time, sampling_time)
                     cost_interp = np.interp(t, time, cost)
                     iter_interp = np.round_(np.interp(t, time, itera))
                     arr=np.column_stack((t,iter_interp,cost_interp))
