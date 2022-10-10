@@ -70,9 +70,17 @@ def runQuery():
 
     rospy.Subscriber("/solver_performance", Float64MultiArray, performanceCallback)
 
-    rospy.wait_for_service('/add_objects_group')
-    obj_loader_srv = rospy.ServiceProxy('/add_objects_group', object_loader_msgs.srv.AddObjectsGroup)
-    obj_unloader_srv = rospy.ServiceProxy('/remove_objects_group', object_loader_msgs.srv.RemoveObjectsGroup)
+    try:
+        rospy.wait_for_service('/add_objects_group',2.0)
+        obj_loader_srv = rospy.ServiceProxy('/add_objects_group', object_loader_msgs.srv.AddObjectsGroup)
+        obj_unloader_srv = rospy.ServiceProxy('/remove_objects_group', object_loader_msgs.srv.RemoveObjectsGroup)
+    except:
+        rospy.logerr("Service /add_objects_group not available. Skipping adding objects." )
+        add_objects = False
+
+    #rospy.wait_for_service('/add_objects_group')
+    #obj_loader_srv = rospy.ServiceProxy('/add_objects_group', object_loader_msgs.srv.AddObjectsGroup)
+    #obj_unloader_srv = rospy.ServiceProxy('/remove_objects_group', object_loader_msgs.srv.RemoveObjectsGroup)
 
     test_name=rospy.get_param("~test_name")
     group_name=rospy.get_param("~group_name")
