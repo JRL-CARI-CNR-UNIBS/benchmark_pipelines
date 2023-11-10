@@ -81,6 +81,10 @@ def runQuery():
     queries_number=rospy.get_param("~queries_number")
     starting_query=rospy.get_param("~starting_query")
     planning_time=rospy.get_param("~planning_time")
+    if (rospy.has_param('~sampling_time')):
+        sampling_time=rospy.get_param('~sampling_time')
+    else:
+        sampling_time=0.05
     long_planning_time=rospy.get_param("~long_planning_time")
     pipeline_ids=rospy.get_param("~pipeline_ids")
     planner_ids=[]
@@ -118,6 +122,8 @@ def runQuery():
             og_req=object_loader_msgs.srv.AddObjectsGroupRequest()
             og_req.objects_group=og
             obj_loader_srv(og_req)
+            rospy.sleep(0.1)
+
 
         for actual_query_number in range(starting_query,queries_number):
             print("query: ",actual_query_number)
@@ -170,7 +176,7 @@ def runQuery():
                     time=array[:,0]
                     itera=array[:,1]
                     cost=array[:,2]
-                    t=np.arange(0, planning_time, 0.01)
+                    t=np.arange(0, planning_time, sampling_time)
                     cost_interp = np.interp(t, time, cost)
                     iter_interp = np.round_(np.interp(t, time, itera))
                     arr=np.column_stack((t,iter_interp,cost_interp))
