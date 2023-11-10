@@ -159,7 +159,7 @@ def runQuery():
                         mg_goal.request.allowed_planning_time=max(long_planning_time,planning_time)
                     else:
                         mg_goal.request.allowed_planning_time=planning_time
-                    print("repetition = ",rep)
+                    print(f"repetition = {rep}, planning time = {mg_goal.request.allowed_planning_time}")
                     received=False
 
                     mg_client.send_goal(mg_goal)
