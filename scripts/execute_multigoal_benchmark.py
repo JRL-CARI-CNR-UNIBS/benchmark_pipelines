@@ -39,7 +39,7 @@ import moveit_msgs.msg
 import geometry_msgs.msg
 import actionlib
 import object_loader_msgs.srv
-
+from datetime import timedelta, datetime
 
 
 performance=np.array([])
@@ -165,7 +165,10 @@ def runQuery():
                         mg_goal.request.allowed_planning_time=max(long_planning_time,planning_time)
                     else:
                         mg_goal.request.allowed_planning_time=planning_time
-                    print(f"repetition = {rep}, planning time = {mg_goal.request.allowed_planning_time}")
+                    now = datetime.now()
+                    delta=timedelta(0,mg_goal.request.allowed_planning_time)
+
+                    print(f"repetition = {rep}, planning time = {mg_goal.request.allowed_planning_time}, expected end {now+delta}")
                     received=False
 
                     mg_client.send_goal(mg_goal)
