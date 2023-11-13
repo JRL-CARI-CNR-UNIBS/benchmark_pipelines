@@ -1,0 +1,7 @@
+csv_name: /home/jacobi/Desktop/wide_portal_res.csv
+figure_folder: /home/jacobi/.ros/imm1
+boxplot_planning_times: [150.0, 300.0, 450.0, 600.0, 750.0, 900.0]
+# planner_names_map:
+# - imm1_mixed_strategy_a
+# - imm1_informed_rrt
+# - imm1_warp_strategy

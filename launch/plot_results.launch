@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+
+<launch>
+
+<node pkg="benchmark_pipelines"  type="result_boxplot.py" name="result_boxplot" output="screen">
+  <rosparam command="load"  file="$(find benchmark_pipelines)/config/plot.yaml"/>
+
+</node>
+
+</launch>

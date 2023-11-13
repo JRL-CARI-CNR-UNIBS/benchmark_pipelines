@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+
+<launch>
+
+<node pkg="benchmark_pipelines"  type="analyze_benchmark.py" name="analize_benchmark" output="screen">
+  <rosparam command="load"  file="$(find benchmark_pipelines)/config/plot.yaml"/>
+
+</node>
+
+</launch>

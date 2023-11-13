@@ -42,7 +42,7 @@ def run():
     figure_folder=rospy.get_param('~figure_folder')
     res=pd.read_csv(filename)
 
-    plot_iter=False
+    plot_iter=True
 
     if (rospy.has_param('~axis_xlim')):
         x_lim=rospy.get_param('~axis_xlim')
