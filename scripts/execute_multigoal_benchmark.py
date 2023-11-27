@@ -197,7 +197,8 @@ def runQuery():
                         res = tmp
                         first_run=False
                     else:
-                        res=res.append(tmp, ignore_index=True)
+			# res=res.append(tmp, ignore_index=True) # DEPRECATED: append is deprecated in pandas
+                    	res = pd.concat([res, tmp], ignore_index=True)
 
 
                     res.to_csv(test_name+"_res.csv")
